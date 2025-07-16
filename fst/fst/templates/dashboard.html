@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>대시보드</title>
+</head>
+<body>
+<h2>{{ username }}님 환영합니다!</h2>
+<form method="post" enctype="multipart/form-data">
+  <input type="file" name="file">
+  <button type="submit">업로드</button>
+</form>
+<ul>
+  {% for f in files %}
+  <li>
+    <a href="/uploads/{{ username }}/{{ f }}">{{ f }}</a>
+    <form method="post" action="/delete_file/{{ f }}" style="display:inline;">
+      <button type="submit">삭제</button>
+    </form>
+  </li>
+  {% endfor %}
+</ul>
+{% if is_admin %}
+<a href="/admin">관리자 페이지</a>
+{% endif %}
+<a href="/logout">로그아웃</a>
+</body>
+</html>
