@@ -1,27 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>대시보드</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-<h2>{{ username }}님 환영합니다!</h2>
-<form method="post" enctype="multipart/form-data">
-  <input type="file" name="file">
-  <button type="submit">업로드</button>
-</form>
-<ul>
-  {% for f in files %}
-  <li>
-    <a href="/uploads/{{ username }}/{{ f }}">{{ f }}</a>
-    <form method="post" action="/delete_file/{{ f }}" style="display:inline;">
-      <button type="submit">삭제</button>
+    <h1>{{ username }}님의 대시보드</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <button type="submit">업로드</button>
     </form>
-  </li>
-  {% endfor %}
-</ul>
-{% if is_admin %}
-<a href="/admin">관리자 페이지</a>
-{% endif %}
-<a href="/logout">로그아웃</a>
+
+    <h2>업로드된 파일 목록</h2>
+    <ul>
+        {% for f in files %}
+        <li>
+            <a href="{{ url_for('uploaded_file', username=username, filename=f) }}">{{ f }}</a>
+            <form method="POST" action="{{ url_for('delete_file', filename=f) }}" style="display:inline;">
+                <button type="submit">삭제</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% if is_admin %}
+    <a href="{{ url_for('admin') }}">관리자 페이지</a>
+    {% endif %}
+    <a href="{{ url_for('logout') }}">로그아웃</a>
 </body>
 </html>
