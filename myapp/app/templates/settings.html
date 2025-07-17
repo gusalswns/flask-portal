@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}설정{% endblock %}
+{% block content %}
+<div class="settings-container">
+  <h2>계정 설정</h2>
+  <form method="POST">
+    <label>이름 변경</label>
+    <input type="text" name="new_name" placeholder="새 이름">
+    <button type="submit">변경</button>
+  </form>
+  <form method="POST">
+    <label>비밀번호 변경</label>
+    <input type="password" name="new_password" placeholder="새 비밀번호">
+    <button type="submit">변경</button>
+  </form>
+  <a href="{{ url_for('auth.logout') }}" class="logout">로그아웃</a>
+</div>
+{% endblock %}

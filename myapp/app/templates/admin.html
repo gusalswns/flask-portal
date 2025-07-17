@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}관리자 페이지{% endblock %}
+{% block content %}
+<div class="admin-container">
+  <h2>관리자 페이지</h2>
+  <h3>계정 목록</h3>
+  <ul class="user-list">
+    {% for u in users %}
+    <li>
+      {{ u[1] }} ({{ u[0] }})
+      <a href="{{ url_for('admin.view_user_files', username=u[0]) }}">파일 보기</a>
+      {% if u[0] != 'root' %}
+      <a href="{{ url_for('admin.delete_user', username=u[0]) }}">계정 삭제</a>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+
+  {% if selected_user %}
+  <h3>{{ selected_user }}의 파일</h3>
+  <ul class="file-list">
+    {% for f in files %}
+    <li>
+      {{ f }}
+      <a href="{{ url_for('admin.admin_download', username=selected_user, filename=f) }}">다운로드</a>
+      <a href="{{ url_for('admin.admin_delete_file', username=selected_user, filename=f) }}">삭제</a>
+    </li>
+    {% else %}
+    <li>파일 없음</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+{% endblock %}
