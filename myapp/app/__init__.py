@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, current_app
 from flask_login import LoginManager, UserMixin
 
 login_manager = LoginManager()
@@ -15,7 +15,7 @@ class User(UserMixin):
 @login_manager.user_loader
 def load_user(user_id):
     import sqlite3
-    conn = sqlite3.connect('users.db')
+    conn = sqlite3.connect(current_app.config['DATABASE'])  # ✅ config에서 경로 불러오기
     c = conn.cursor()
     c.execute("SELECT username, name, is_admin FROM users WHERE username=?", (user_id,))
     row = c.fetchone()
