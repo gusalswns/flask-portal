@@ -1,6 +1,5 @@
 import os
 
-# 현재 파일 위치를 기준으로 절대 경로 계산
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 SECRET_KEY = "supersecretkey"
