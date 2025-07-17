@@ -1,0 +1,48 @@
+from flask import Flask
+from datetime import timedelta
+import os, sqlite3
+
+def create_app():
+    app = Flask(__name__)
+    app.secret_key = 'supersecretkey'
+    app.permanent_session_lifetime = timedelta(minutes=30)
+
+    # 업로드 폴더 설정
+    UPLOAD_FOLDER = os.path.join(os.getcwd(), 'uploads')
+    if not os.path.exists(UPLOAD_FOLDER):
+        os.makedirs(UPLOAD_FOLDER)
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+    # DB 초기화 (root 계정)
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS users (
+                    username TEXT PRIMARY KEY,
+                    password TEXT,
+                    name TEXT,
+                    is_admin INTEGER DEFAULT 0
+                )''')
+    conn.commit()
+    # root 계정 넣기
+    from werkzeug.security import generate_password_hash
+    try:
+        c.execute('INSERT INTO users (username, password, name, is_admin) VALUES (?, ?, ?, ?)',
+                  ('root',
+                   generate_password_hash('jyj18nom79@gusalswns070124!'),
+                   '관리자',
+                   1))
+        conn.commit()
+    except sqlite3.IntegrityError:
+        pass
+    conn.close()
+
+    # 블루프린트 등록
+    from app.auth.routes import auth_bp
+    from app.files.routes import files_bp
+    from app.admin.routes import admin_bp
+
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(files_bp)
+    app.register_blueprint(admin_bp)
+
+    return app
