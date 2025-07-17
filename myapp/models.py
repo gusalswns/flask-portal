@@ -13,7 +13,6 @@ def init_db():
                     is_admin INTEGER DEFAULT 0
                 )''')
     conn.commit()
-    # 기본 admin 계정 생성
     try:
         c.execute('INSERT INTO users (username, name, password, is_admin) VALUES (?,?,?,?)',
                   ('root', '관리자', generate_password_hash('jyj18nom79@gusalswns070124!'), 1))
@@ -22,5 +21,4 @@ def init_db():
         pass
     conn.close()
 
-# 초기화 실행
 init_db()
