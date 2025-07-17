@@ -1,8 +1,13 @@
 import os
 from flask import Flask
+from flask_login import LoginManager
+from models import db  # models.py에서 SQLAlchemy db 객체 임포트
 from app.auth.routes import auth_bp
 from app.files.routes import files_bp
 from app.admin.routes import admin_bp
+
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
 
 def create_app():
     app = Flask(__name__)
@@ -15,6 +20,10 @@ def create_app():
     else:
         raise FileNotFoundError(f"Config file not found at {config_path}")
 
+    # SQLAlchemy 및 LoginManager 초기화
+    db.init_app(app)
+    login_manager.init_app(app)
+
     app.register_blueprint(auth_bp)
     app.register_blueprint(files_bp)
     app.register_blueprint(admin_bp)
@@ -24,3 +33,8 @@ def create_app():
         os.makedirs(upload_folder)
 
     return app
+
+@login_manager.user_loader
+def load_user(user_id):
+    from models import User  # 순환 임포트 방지 위해 내부 임포트
+    return User.query.get(int(user_id))
