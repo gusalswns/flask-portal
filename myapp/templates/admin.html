@@ -1,1 +1,0 @@
-{% extends "base.html" %}{% block title %}Admin{% endblock %}{% block content %}<h2>Admin Panel</h2><ul>{% for u in users %}<li>{{ u[1] }} - {{ u[2] }}<a href="{{ url_for('delete_user', user_id=u[0]) }}">Delete</a></li>{% endfor %}</ul><a href="{{ url_for('logout') }}">Logout</a>{% endblock %}
