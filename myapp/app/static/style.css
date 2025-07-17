@@ -1,0 +1,103 @@
+body {
+  background-color: #222;
+  color: #eee;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: #0af;
+}
+
+.top-bar {
+  background: #111;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-name {
+  font-weight: bold;
+}
+
+.settings a {
+  color: #0af;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+.login-container, .settings-container, .dashboard-container, .admin-container {
+  background: #333;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  margin: 50px auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.7);
+}
+
+h2, h3 {
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+input[type="text"], input[type="password"], input[type="file"] {
+  padding: 10px;
+  margin: 5px 0;
+  border: none;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px;
+  background: #0af;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #08c;
+}
+
+ul.file-list, ul.user-list {
+  list-style: none;
+  padding: 0;
+}
+
+ul.file-list li, ul.user-list li {
+  margin: 5px 0;
+}
+
+.flashes {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.flashes li.success {
+  color: #0f0;
+}
+
+.flashes li.error {
+  color: #f33;
+}
+
+.logout {
+  display: inline-block;
+  padding: 10px;
+  background: #f33;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 10px;
+}
