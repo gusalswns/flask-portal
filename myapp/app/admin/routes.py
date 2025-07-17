@@ -1,18 +1,19 @@
 from flask import Blueprint, render_template, session, redirect, url_for, flash, send_from_directory
-import sqlite3, os
-from config import UPLOAD_FOLDER
+import sqlite3
+import os
+from config import UPLOAD_FOLDER, DATABASE
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
 @admin_bp.before_request
 def check_admin():
     if not session.get('is_admin'):
-        flash('관리자 권한 필요!','error')
+        flash('관리자 권한 필요!', 'error')
         return redirect(url_for('auth.login'))
 
 @admin_bp.route('/')
 def admin_page():
-    conn = sqlite3.connect('users.db')
+    conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
     c.execute('SELECT username, name FROM users')
     users = c.fetchall()
@@ -38,20 +39,20 @@ def admin_delete_file(username, filename):
     fpath = os.path.join(folder, filename)
     if os.path.exists(fpath):
         os.remove(fpath)
-        flash('파일 삭제 완료!','success')
+        flash('파일 삭제 완료!', 'success')
     return redirect(url_for('admin.view_user_files', username=username))
 
 @admin_bp.route('/delete_user/<username>')
 def delete_user(username):
-    conn = sqlite3.connect('users.db')
+    conn = sqlite3.connect(DATABASE)
     c = conn.cursor()
-    c.execute('DELETE FROM users WHERE username=?',(username,))
+    c.execute('DELETE FROM users WHERE username=?', (username,))
     conn.commit()
     conn.close()
     folder = os.path.join(UPLOAD_FOLDER, username)
     if os.path.exists(folder):
         for f in os.listdir(folder):
-            os.remove(os.path.join(folder,f))
+            os.remove(os.path.join(folder, f))
         os.rmdir(folder)
-    flash('계정 삭제 완료!','success')
+    flash('계정 삭제 완료!', 'success')
     return redirect(url_for('admin.admin_page'))
